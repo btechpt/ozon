@@ -1,0 +1,12 @@
+{% extends "auth/login.html" %}
+
+{% block css %}
+  {% include "_stylesheets.html" %}
+
+  <style>
+    body {
+      background-image: url("{{ login_background_url }}")
+    }
+  </style>
+{% endblock %}
+

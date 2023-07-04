@@ -34,6 +34,7 @@ openstack_dashboard/test/integration_tests/test_reports/
 openstack_dashboard/horizon_wsgi.py
 doc/build/
 /static/
+/media/
 .tox
 node_modules
 build

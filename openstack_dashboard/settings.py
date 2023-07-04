@@ -117,6 +117,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'horizon.context_processors.horizon',
                 'openstack_dashboard.context_processors.openstack',
+                'openstack_dashboard.dashboards.ozone.context_processors.context'
             ],
             'loaders': [
                 'horizon.themes.ThemeTemplateLoader'
@@ -371,6 +372,12 @@ HORIZON_COMPRESS_OFFLINE_CONTEXT_BASE = {
 if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(ROOT_PATH, 'db.sqlite3'),
+    }
+}
 
 # Here comes the Django settings deprecation section. Being at the very end
 # of settings.py allows it to catch the settings defined in local_settings.py
