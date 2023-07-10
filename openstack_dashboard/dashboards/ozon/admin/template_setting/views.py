@@ -46,6 +46,10 @@ class IndexView(tables.DataTableView):
                     'name': 'Login Background',
                     'value': format_html('<img src="{}" />', setting.login_background.url)
                 },
+                {
+                    'name': 'Primary Color',
+                    'value': format_html('<div style="width: 300px; height: 50px; background-color: {};"></div>', setting.primary_color)
+                },
             ]
         except Exception as e:
             exceptions.handle(self.request,
@@ -73,6 +77,7 @@ class UpdateSettingView(forms.ModalFormView):
                     'dashboard_name': setting.dashboard_name,
                     'logo': setting.logo,
                     'login_background': setting.login_background,
+                    'primary_color': setting.primary_color,
                 }
 
         except Exception:

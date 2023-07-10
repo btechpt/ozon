@@ -15,6 +15,11 @@ class SettingForm(forms.SelfHandlingForm):
                                     required=False)
     login_background = forms.ImageField(label=_("Login Background"),
                             required=False)
+    primary_color = forms.CharField(
+        label=_("Primary Color"),
+        widget=forms.TextInput(attrs={'type': 'color'})
+    )
+
     def handle(self, request, data):
         try:
             setting = TemplateSetting.objects.first()
@@ -23,6 +28,7 @@ class SettingForm(forms.SelfHandlingForm):
                 setting.dashboard_name = data['dashboard_name']
                 setting.logo = data['logo']
                 setting.login_background = data['login_background']
+                setting.primary_color = data['primary_color']
 
                 setting.save()
             else:
@@ -31,6 +37,7 @@ class SettingForm(forms.SelfHandlingForm):
                     dashboard_name = data['dashboard_name'],
                     logo = data['logo'],
                     login_background = data['login_background'],
+                    primary_color = data['primary_color']
                 )
                 setting.save()
 

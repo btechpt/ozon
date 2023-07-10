@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block css %}
+  {% include "_stylesheets.html" %}
+
+  <style type="text/css">
+    :root {
+        --primary-color: {{ primary_color }}; /* Default primary color */
+    }
+  </style>
+{% endblock %}
+
