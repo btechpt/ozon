@@ -117,7 +117,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'horizon.context_processors.horizon',
                 'openstack_dashboard.context_processors.openstack',
-                'openstack_dashboard.dashboards.ozone.context_processors.context'
+                'openstack_dashboard.dashboards.ozon.context_processors.context'
             ],
             'loaders': [
                 'horizon.themes.ThemeTemplateLoader'

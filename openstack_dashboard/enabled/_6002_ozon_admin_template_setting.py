@@ -3,7 +3,7 @@ PANEL = 'template_setting'
 # The slug of the dashboard the PANEL associated with. Required.
 PANEL_DASHBOARD = 'admin'
 # The slug of the panel group the PANEL is associated with.
-PANEL_GROUP = 'ozone'
+PANEL_GROUP = 'ozon'
 
 # Python panel class of the PANEL to be added.
-ADD_PANEL = 'openstack_dashboard.dashboards.ozone.admin.template_setting.panel.TemplateSetting'
+ADD_PANEL = 'openstack_dashboard.dashboards.ozon.admin.template_setting.panel.TemplateSetting'

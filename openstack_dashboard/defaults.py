@@ -110,9 +110,9 @@ AVAILABLE_THEMES = [
         'themes/material'
     ),
     (
-        'ozone',
-        pgettext_lazy('Ozone Theme', 'Ozone'),
-        'themes/ozone'
+        'ozon',
+        pgettext_lazy('Ozon Theme', 'Ozon'),
+        'themes/ozon'
     )
 ]
 

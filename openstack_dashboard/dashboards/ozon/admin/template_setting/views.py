@@ -16,7 +16,7 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import views, exceptions, messages, tables, forms
-from openstack_dashboard.dashboards.ozone.models import TemplateSetting
+from openstack_dashboard.dashboards.ozon.models import TemplateSetting
 from .forms import SettingForm
 from .tables import SettingTable
 

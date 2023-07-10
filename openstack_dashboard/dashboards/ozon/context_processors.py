@@ -1,4 +1,4 @@
-from openstack_dashboard.dashboards.ozone.models import TemplateSetting
+from openstack_dashboard.dashboards.ozon.models import TemplateSetting
 
 
 def context(request):

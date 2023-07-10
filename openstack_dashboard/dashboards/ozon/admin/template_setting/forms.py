@@ -4,7 +4,7 @@ from django.core import validators
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import forms, messages, exceptions
-from openstack_dashboard.dashboards.ozone.models import TemplateSetting
+from openstack_dashboard.dashboards.ozon.models import TemplateSetting
 
 
 class SettingForm(forms.SelfHandlingForm):
