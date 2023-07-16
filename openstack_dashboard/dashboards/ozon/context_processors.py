@@ -1,8 +1,8 @@
-from openstack_dashboard.dashboards.ozon.models import TemplateSetting
+from openstack_dashboard.dashboards.ozon.models import OzonSettingStore
 
 
 def context(request):
-    template = TemplateSetting.get_data()
+    template = OzonSettingStore.get_data()
     return {
         'logo_url': template['logo'],
         'login_background_url': template['login_background'],

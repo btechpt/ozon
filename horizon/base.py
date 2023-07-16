@@ -562,6 +562,7 @@ class Dashboard(Registry, HorizonComponent):
 
         # Apply access controls to all views in the patterns
         permissions = getattr(self, 'permissions', [])
+        print(permissions)
         _decorate_urlconf(urlpatterns, require_perms, permissions)
         _decorate_urlconf(urlpatterns, _current_component, dashboard=self)
         # Require login if not public.

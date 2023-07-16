@@ -16,20 +16,28 @@ from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import views, exceptions, messages, tables, forms
-from openstack_dashboard.dashboards.ozon.models import TemplateSetting
+from openstack_dashboard.dashboards.ozon.models import OzonSettingStore
 from .forms import SettingForm
 from .tables import SettingTable
+from django.conf import settings
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+
+from openstack_auth.views import login
+from openstack_dashboard.dashboards.ozon.auth import multi_region
+
+
 
 
 class IndexView(tables.DataTableView):
     page_title = _("Setting")
-    template_name = "admin/template_setting/index.html"
+    template_name = "admin/ozon_setting/index.html"
     table_class = SettingTable
 
 
     def get_data(self):
         try:
-            setting = TemplateSetting.objects.first()
+            setting = OzonSettingStore.objects.first()
             if not setting:
                 return []
                 
@@ -40,11 +48,11 @@ class IndexView(tables.DataTableView):
                 },
                 {
                     'name': 'Logo',
-                    'value': format_html('<img src="{}" />', setting.logo.url)
+                    'value': format_html('<img src="{}" width="100px" />', setting.logo.url)
                 },
                 {
                     'name': 'Login Background',
-                    'value': format_html('<img src="{}" />', setting.login_background.url)
+                    'value': format_html('<img src="{}" width="100px" />', setting.login_background.url)
                 },
                 {
                     'name': 'Primary Color',
@@ -64,14 +72,14 @@ class UpdateSettingView(forms.ModalFormView):
     modal_header = _("Update Setting")
     page_title = _("Setting")
     submit_label = _("Update Setting")
-    submit_url = reverse_lazy("horizon:admin:template_setting:update_setting")
-    success_url = reverse_lazy("horizon:admin:template_setting:index")
-    template_name = 'admin/template_setting/form_setting.html'
+    submit_url = reverse_lazy("horizon:admin:ozon_setting:update_setting")
+    success_url = reverse_lazy("horizon:admin:ozon_setting:index")
+    template_name = 'admin/ozon_setting/form_setting.html'
 
 
     def get_initial(self):
         try:
-            setting = TemplateSetting.objects.first()
+            setting = OzonSettingStore.objects.first()
             if setting:
                 return {
                     'dashboard_name': setting.dashboard_name,
@@ -86,3 +94,18 @@ class UpdateSettingView(forms.ModalFormView):
 
         return None
 
+
+@csrf_protect
+@never_cache
+def change_region(request):
+    new_post = request.POST.copy()
+    cred = multi_region.get_auth_credentials(request)
+    new_post['username'] = cred['username']
+    new_post['password'] = cred['password']
+
+    if settings.OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT:
+        last_domain = request.COOKIES.get('login_domain', None)
+        new_post['domain'] = last_domain
+
+    request.POST = new_post
+    return login(request)

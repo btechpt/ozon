@@ -10,14 +10,11 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from django.conf.urls import url
+from django.utils.translation import ugettext_lazy as _
 
-from . import views
+import horizon
 
-urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-    url(r'^update_setting/$',
-        views.UpdateSettingView.as_view(), name='update_setting'),
-        
-]
 
+class OzonSetting(horizon.Panel):
+    name = _("Ozon Setting")
+    slug = "ozon_setting"

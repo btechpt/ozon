@@ -1,5 +1,63 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
+{% block custom_head_js %}
+{{ block.super }}
+<script>
+  function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+
+  function seamless_change_region(region_id, region_name, current_region_name) {
+      var initial_region = getCookie('login_region')
+      var seamless_login_load = '<div class="modal loading"><div class="modal-dialog modal-xs"><div class="modal-content"><div class="modal-body"><span class="loader fa fa-spinner fa-spin fa-5x text-center"></span><div class="loader-caption h4 text-center">{% trans "Change Region" %}</div></div></div></div></div>';
+      $('body').append(seamless_login_load);
+      $(".loading").modal('show');
+      var payload = $('form').serialize() + "&fake_email=&fake_password=&region=" + region_id;
+      $.ajax({
+          url: "/admin/ozon_setting/change_region_seamless/",
+          method: "POST",
+          data: payload,
+          dataType: "json",
+          headers: {
+              "X-CSRFToken": getCookie('csrftoken')
+          }
+      }).done(function (response) {
+          console.log("done");
+          console.log(response);
+          setTimeout(function () {
+              location.reload();
+          }, 1000);
+      }).fail(function (xhr, text, error) {
+          $(".modal.loading").remove();
+          $(".modal-backdrop").remove();
+          if (xhr.responseText == "") {
+              setTimeout(function () {
+                  location.reload();
+              }, 1000);
+          } else {
+              alert("Looks like you don't have access to " + region_name);
+              // try login back to initial region
+              seamless_change_region(initial_region, current_region_name, current_region_name)
+          }
+      });
+  }
+</script>
+
+{% endblock %}
 {% block css %}
   {% include "_stylesheets.html" %}
 

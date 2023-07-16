@@ -117,7 +117,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'horizon.context_processors.horizon',
                 'openstack_dashboard.context_processors.openstack',
-                'openstack_dashboard.dashboards.ozon.context_processors.context' # OZON
             ],
             'loaders': [
                 'horizon.themes.ThemeTemplateLoader'
@@ -228,6 +227,40 @@ COMPRESS_OFFLINE_CONTEXT = 'horizon.themes.offline_context'
 
 # Notice all customizable configurations should be above this line
 XSTATIC_MODULES = settings_utils.BASE_XSTATIC_MODULES
+
+# OZON REGION
+# Apply Ozon Setting before loading local settings
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(ROOT_PATH, 'db.sqlite3'),
+    }
+}
+
+
+# Hacky read SITE_BRANDING from database
+class Branding:
+    def __str__(self) -> str:
+        try:
+            from openstack_dashboard.dashboards.ozon.models import OzonSettingStore
+            setting = OzonSettingStore.get_data()
+            return setting['dashboard_name']
+        except:
+            return 'Ozon'
+
+SITE_BRANDING = Branding()
+SITE_BRANDING_LINK = reverse_lazy("horizon:user_home")
+AVAILABLE_THEMES = [
+    (
+        'ozon',
+        pgettext_lazy('Ozon Theme', 'Ozon'),
+        'themes/ozon'
+    )
+]
+DEFAULT_THEME = 'ozon'
+TEMPLATES[0]['OPTIONS']['context_processors'].append('openstack_dashboard.dashboards.ozon.context_processors.context')
+AUTHENTICATION_BACKENDS = ('openstack_dashboard.dashboards.ozon.auth.ozon_auth_backend.OzonAuthBackend',)
+# END OZON REGION
 
 if not LOCAL_PATH:
     LOCAL_PATH = os.path.join(ROOT_PATH, 'local')
@@ -371,29 +404,6 @@ HORIZON_COMPRESS_OFFLINE_CONTEXT_BASE = {
 
 if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
-
-# OZON
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(ROOT_PATH, 'db.sqlite3'),
-    }
-}
-
-
-# Hacky read SITE_BRANDING from database
-class Branding:
-    def __str__(self) -> str:
-        try:
-            from openstack_dashboard.dashboards.ozon.models import TemplateSetting
-            setting = TemplateSetting.get_data()
-            return setting['dashboard_name']
-        except:
-            return "Ozon"
-        
-SITE_BRANDING = Branding()
-SITE_BRANDING_LINK = reverse_lazy("horizon:user_home")
-DEFAULT_THEME = 'ozon'
 
 
 # Here comes the Django settings deprecation section. Being at the very end

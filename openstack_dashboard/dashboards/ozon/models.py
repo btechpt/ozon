@@ -1,7 +1,7 @@
 from typing import Iterable, Optional
 from django.db import models
 
-class TemplateSetting(models.Model):
+class OzonSettingStore(models.Model):
     id = models.IntegerField(primary_key=True)
     dashboard_name = models.CharField(max_length=256)
     logo = models.ImageField(upload_to='images/')
@@ -11,7 +11,7 @@ class TemplateSetting(models.Model):
     cache = {}
 
     def save(self, *args, **kwargs):
-        TemplateSetting.cache = {}
+        OzonSettingStore.cache = {} # Clear memory cache
         return super().save(*args, **kwargs)
     
     @classmethod
@@ -19,17 +19,15 @@ class TemplateSetting(models.Model):
         if cls.cache:
             return cls.cache
 
-        template = TemplateSetting.objects.first()
+        template = OzonSettingStore.objects.first()
         cls.save_cache(template)
         return cls.cache
     
     @classmethod
     def save_cache(cls, result):
-        default_dashboard_name = "Ozon Dashboard"
-        default_logo_url = "/static/dashboard/img/logo.svg"
         cls.cache = {
-            "dashboard_name":  default_dashboard_name,
-            "logo": default_logo_url,
+            "dashboard_name":  "Ozon Dashboard",
+            "logo": "/static/dashboard/img/logo.svg",
             "login_background": "",
             "primary_color": "#0c4869"
         }

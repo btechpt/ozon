@@ -10,11 +10,19 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from django.utils.translation import ugettext_lazy as _
+from django.conf.urls import url
 
-import horizon
+from horizon.decorators import require_perms
 
+from . import views
 
-class TemplateSetting(horizon.Panel):
-    name = _("Template Setting")
-    slug = "template_setting"
+def require_admin(callback):
+    return require_perms(callback, 'openstack.roles.admin')
+
+urlpatterns = [
+    url(r'^$', require_admin(views.IndexView.as_view()), name='index'),
+    url(r'^update_setting/$',
+        require_admin(views.UpdateSettingView.as_view()), name='update_setting'),
+    url(r"^change_region_seamless/$", views.change_region, name='change_region_seamless'),
+]
+

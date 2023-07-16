@@ -9,7 +9,7 @@ class UpdateSettingAction(tables.LinkAction):
     classes = ("ajax-modal",)
     icon = "pencil"
     step = None
-    url = "horizon:admin:template_setting:update_setting"
+    url = "horizon:admin:ozon_setting:update_setting"
 
     def get_link_url(self, datum=None):
         return reverse(self.url)

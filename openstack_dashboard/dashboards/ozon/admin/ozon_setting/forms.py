@@ -4,7 +4,7 @@ from django.core import validators
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import forms, messages, exceptions
-from openstack_dashboard.dashboards.ozon.models import TemplateSetting
+from openstack_dashboard.dashboards.ozon.models import OzonSettingStore
 
 
 class SettingForm(forms.SelfHandlingForm):
@@ -22,7 +22,7 @@ class SettingForm(forms.SelfHandlingForm):
 
     def handle(self, request, data):
         try:
-            setting = TemplateSetting.objects.first()
+            setting = OzonSettingStore.objects.first()
             if setting:
                 # Update
                 setting.dashboard_name = data['dashboard_name']
@@ -33,7 +33,7 @@ class SettingForm(forms.SelfHandlingForm):
                 setting.save()
             else:
                 # Create
-                setting = TemplateSetting(
+                setting = OzonSettingStore(
                     dashboard_name = data['dashboard_name'],
                     logo = data['logo'],
                     login_background = data['login_background'],
