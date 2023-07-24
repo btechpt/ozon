@@ -11,13 +11,14 @@
 # under the License.
 
 from django.conf.urls import url
+from openstack_auth import utils
 
 from horizon.decorators import require_perms
 
 from . import views
 
 def require_admin(callback):
-    return require_perms(callback, 'openstack.roles.admin')
+    return require_perms(callback, tuple(utils.get_admin_permissions()))
 
 urlpatterns = [
     url(r'^$', require_admin(views.IndexView.as_view()), name='index'),
