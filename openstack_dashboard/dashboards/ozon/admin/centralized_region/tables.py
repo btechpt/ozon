@@ -18,7 +18,7 @@ class AddRegionAction(tables.LinkAction):
         return reverse(self.url)
 
 class EditRegion(tables.LinkAction):
-        name = "snapshot"
+        name = "edit_region"
         verbose_name = _("Edit Region")
         url = "horizon:admin:centralized_region:update_region"
         classes = ("ajax-modal",)
