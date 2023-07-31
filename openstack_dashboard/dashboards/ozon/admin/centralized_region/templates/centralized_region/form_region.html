@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Add/Update Region" %}{% endblock %}
+
+{% block main %}
+    {% include "admin/centralized_region/_form_region.html" %}
+{% endblock %}

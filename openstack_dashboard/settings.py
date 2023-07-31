@@ -260,6 +260,8 @@ AVAILABLE_THEMES = [
 DEFAULT_THEME = 'ozon'
 TEMPLATES[0]['OPTIONS']['context_processors'].append('openstack_dashboard.dashboards.ozon.context_processors.context')
 AUTHENTICATION_BACKENDS = ('openstack_dashboard.dashboards.ozon.auth.ozon_auth_backend.OzonAuthBackend',)
+DEFAULT_REGION = (OPENSTACK_KEYSTONE_URL, "Default")
+
 # END OZON REGION
 
 if not LOCAL_PATH:
@@ -312,6 +314,45 @@ if os.path.exists(LOCAL_SETTINGS_DIR_PATH):
                 except Exception:
                     _LOG.exception(
                         "Can not exec settings snippet %s", filename)
+
+# OZON Additonal Setting Afer Local Setting
+class ExternalSourceList:
+    def __init__(self, front_data, additional_source):
+        self.front_data = front_data
+        self.additional_source = additional_source
+        self.all_data = front_data[:]
+        self.loaded = False
+
+
+    def __getitem__(self, index):
+        if not self.loaded:
+            self.refresh()
+
+        return self.all_data[index]
+
+    def __len__(self):
+        if not self.loaded:
+            self.refresh()
+
+        return len(self.all_data)
+
+    def __repr__(self):
+        if not self.loaded:
+            self.refresh()
+
+        return repr(self.all_data)
+
+    def refresh(self):
+        additional_data = self.additional_source()
+        self.all_data = self.front_data + additional_data
+        self.loaded = True
+
+def get_region_data():
+    from openstack_dashboard.dashboards.ozon.models import RegionList
+    return RegionList.get_all()
+
+AVAILABLE_REGIONS = ExternalSourceList(front_data=[DEFAULT_REGION], additional_source=get_region_data)
+# OZON End Additional Setting
 
 if USER_MENU_LINKS is None:
     USER_MENU_LINKS = []

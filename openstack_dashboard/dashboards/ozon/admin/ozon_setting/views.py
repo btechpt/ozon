@@ -55,6 +55,10 @@ class IndexView(tables.DataTableView):
                     'value': format_html('<img src="{}" width="100px" />', setting.login_background.url)
                 },
                 {
+                    'name': 'Fav Icon',
+                    'value': format_html('<img src="{}" width="50px" />', setting.fav_icon.url)
+                },
+                {
                     'name': 'Primary Color',
                     'value': format_html('<div style="width: 300px; height: 50px; background-color: {};"></div>', setting.primary_color)
                 },
@@ -86,6 +90,7 @@ class UpdateSettingView(forms.ModalFormView):
                     'logo': setting.logo,
                     'login_background': setting.login_background,
                     'primary_color': setting.primary_color,
+                    'fav_icon': setting.fav_icon,
                 }
 
         except Exception:

@@ -6,5 +6,6 @@ def context(request):
     return {
         'logo_url': template['logo'],
         'login_background_url': template['login_background'],
-        'primary_color': template['primary_color']
+        'primary_color': template['primary_color'],
+        'fav_icon': template['fav_icon'],
     }

@@ -15,6 +15,8 @@ class SettingForm(forms.SelfHandlingForm):
                                     required=False)
     login_background = forms.ImageField(label=_("Login Background"),
                             required=False)
+    fav_icon = forms.ImageField(label=_("Fav Icon"),
+                            required=False)
     primary_color = forms.CharField(
         label=_("Primary Color"),
         widget=forms.TextInput(attrs={'type': 'color'})
@@ -29,6 +31,7 @@ class SettingForm(forms.SelfHandlingForm):
                 setting.logo = data['logo']
                 setting.login_background = data['login_background']
                 setting.primary_color = data['primary_color']
+                setting.fav_icon = data['fav_icon']
 
                 setting.save()
             else:
@@ -37,7 +40,8 @@ class SettingForm(forms.SelfHandlingForm):
                     dashboard_name = data['dashboard_name'],
                     logo = data['logo'],
                     login_background = data['login_background'],
-                    primary_color = data['primary_color']
+                    primary_color = data['primary_color'],
+                    fav_icon = data['fav_icon']
                 )
                 setting.save()
 
