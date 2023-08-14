@@ -50,3 +50,12 @@ To build the docs, use::
   $ tox -e docs
 
 Results are in the ``doc/build/html`` directory
+
+
+# Ozon Addition
+
+After you install horizon with usual method, run database migration to crate database for saving Ozon settings
+
+```python
+python manage.py migrate
+```

@@ -331,14 +331,12 @@ class ExternalSourceList:
         return self.all_data[index]
 
     def __len__(self):
-        if not self.loaded:
-            self.refresh()
+        self.refresh()
 
         return len(self.all_data)
 
     def __repr__(self):
-        if not self.loaded:
-            self.refresh()
+        self.refresh()
 
         return repr(self.all_data)
 
