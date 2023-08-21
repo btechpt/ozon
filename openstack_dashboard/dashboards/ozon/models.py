@@ -2,7 +2,7 @@ import os
 from typing import Iterable, Optional
 from django.core.exceptions import ValidationError
 from django.db import models
-
+from django.core.cache import cache
 from openstack_dashboard import settings
 
 class OzonSettingStore(models.Model):
@@ -13,24 +13,24 @@ class OzonSettingStore(models.Model):
     primary_color = models.CharField(max_length=256)
     fav_icon = models.ImageField(upload_to='images/')
 
-    cache = {}
 
     def save(self, *args, **kwargs):
-        OzonSettingStore.cache = {} # Clear memory cache
+        cache.delete("ozon_setting")
         return super().save(*args, **kwargs)
     
     @classmethod
     def get_data(cls):
-        if cls.cache:
-            return cls.cache
+        data = cache.get("ozon_setting")
+        if data:
+            return data
 
         template = OzonSettingStore.objects.first()
         cls.save_cache(template)
-        return cls.cache
+        return cache.get("ozon_setting")
     
     @classmethod
     def save_cache(cls, result):
-        cls.cache = {
+        data = {
             "dashboard_name":  "Ozon Dashboard",
             "logo": "/static/dashboard/img/logo.svg",
             "login_background": "",
@@ -40,16 +40,17 @@ class OzonSettingStore(models.Model):
     
         if result:
             if result.dashboard_name:
-                cls.cache['dashboard_name'] = result.dashboard_name
+                data['dashboard_name'] = result.dashboard_name
             if result.dashboard_name:
-                cls.cache['logo'] = result.logo.url
+                data['logo'] = result.logo.url
             if result.login_background:
-                cls.cache['login_background'] = result.login_background.url
+                data['login_background'] = result.login_background.url
             if result.primary_color:
-                cls.cache['primary_color'] = result.primary_color
+                data['primary_color'] = result.primary_color
             if result.fav_icon:
-                cls.cache['fav_icon'] = result.fav_icon.url
+                data['fav_icon'] = result.fav_icon.url
             
+        cache.set("ozon_setting", data)
 
 
 class RegionList(models.Model):
