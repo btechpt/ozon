@@ -113,4 +113,9 @@ def change_region(request):
         new_post['domain'] = last_domain
 
     request.POST = new_post
-    return login(request)
+    response = login(request)
+    
+    # Re set credentials on session
+    multi_region.save_auth_credentials(request, cred['username'], cred['password'])
+    
+    return response
